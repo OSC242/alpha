@@ -44,3 +44,26 @@ $botman->hears("/rule(?:@$botname)?(?: (.*))?", function ($bot, $subject = null)
 $botman->hears('/web', function ($bot) {
     $bot->reply("OSC242 se prépare. Nous avons une page d'accueil qui vous permet d'inscrire votre adresse e-mail pour être informé de l'ouverture de la communauté: http://osc.cg/.\n\nNous avons un wiki qui se construit tout doucement aussi: http://wiki.osc.cg/", ['parse_mode' => 'markdown']);
 });
+
+// Currently removed any voice message.
+// TODO: Make it a channel setting
+$botman->receivesAudio(function($bot, $audios) {
+    if ($bot->getMessage()->getPayload()->has('voice')) {
+        if ($bot->getUser()->getUsername()) {
+            $userStr = '@'.$bot->getUser()->getUsername();
+        } else {
+            $userStr = "[{$bot->getUser()->getFirstName()}](tg://user?id={$bot->getUser()->getId()})";
+        }
+
+        $msg = $bot->getMessage()->getPayload();
+        $bot->sendRequest('deleteMessage', [
+            'chat_id' => $msg['chat']['id'],
+            'message_id' => $msg['message_id'],
+        ]);
+
+        $bot->reply(
+            "$userStr, les *messages audio* ne sont pas autorisés",
+            ['parse_mode' => 'markdown']
+        );
+    }
+});
