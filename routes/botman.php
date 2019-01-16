@@ -14,7 +14,8 @@ $botman->hears("/(start|help)(?:@$botname)?", function ($bot) {
 
     $msg = "$userStr, voici la liste des commandes:\n\n"
           ."/start ou /help - Obtenir ce message\n"
-          ."/rule `sujet` - Obtenir la liste des règles ou une règle en particulier";
+          ."/rule `sujet` - Obtenir la liste des règles ou une règle en particulier\n"
+          ."/web - Point d'entrée web";
 
     $bot->reply($msg, ['parse_mode' => 'markdown']);
 });
@@ -38,4 +39,8 @@ $botman->hears("/rule(?:@$botname)?(?: (.*))?", function ($bot, $subject = null)
     }
 
     $bot->reply($msg, ['parse_mode' => 'markdown']);
+});
+
+$botman->hears('/web', function ($bot) {
+    $bot->reply("OSC242 se prépare. Nous avons une page d'accueil qui vous permet d'inscrire votre adresse e-mail pour être informé de l'ouverture de la communauté: http://osc.cg/.\n\nNous avons un wiki qui se construit tout doucement aussi: http://wiki.osc.cg/", ['parse_mode' => 'markdown']);
 });
